@@ -3,20 +3,21 @@ using namespace std;
 typedef long long ll;
 
 int main() {
-    int N, K;
+    ll N, K;
     cin >> N >> K;
     vector<ll> A(N);
     ll sum = 0;
-    int head = 0;
-    int tail = 0;
+    int left = 0;
+    int right = 0;
     ll cnt = 0;
-    for (; tail < N; ++tail) {
-        cin >> A[tail];
-        sum += A[tail];
-        ll tmp = 0;
-        while (sum - A[head] > K) {
-            tmp++;
+    for (; right < N; ++right) {
+        cin >> A[right];
+        sum += A[right];
+        while (sum >= K) {
+            sum -= A[left];
+            cnt += N - right;
+            left++;
         }
-        cnt = cnt * 2 +
     }
+    cout << cnt << endl;
 }
