@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
-project(abc107)
+project(keyence2020)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(b b.cpp)
-add_executable(c c.cpp)
+add_executable(keyence2020 b.cpp)
