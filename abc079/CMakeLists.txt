@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
-project(abc084)
+project(abc079)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(c c.cpp)
-add_executable(d d.cpp)
+add_executable(abc079 d.cpp)
