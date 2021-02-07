@@ -3,8 +3,6 @@ using namespace std;
 typedef long long ll;
 const ll mod = 1000000007;
 
-// TODO: solve
-
 ll upper_sqrt(ll n) {
     ll left = 0, right = min(n, (ll)sqrt(LONG_LONG_MAX));
     while (left <= right) {
@@ -29,7 +27,7 @@ ll ceil(ll n, ll m) {
 
 int main() {
     string sx, sy, sr;
-    ll x, y, r;
+    ll x = 0, y = 0, r = 0;
     cin >> sx >> sy >> sr;
     bool is_float = false;
     int keta = 0;
