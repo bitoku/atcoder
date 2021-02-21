@@ -3,6 +3,8 @@ using namespace std;
 typedef long long ll;
 const ll mod = 1000000007;
 
+// TODO: solve without editorial
+
 int main() {
     int n;
     cin >> n;
