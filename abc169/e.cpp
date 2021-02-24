@@ -1,44 +1,23 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+const ll mod = 1000000007;
 
 int main() {
     int n;
     cin >> n;
-    vector<int> aa, bb;
-    vector<pair<int, int>> cc;
-    for (int i=0;i<n;i++) {
-        int a, b;
-        cin >> a >> b;
-        aa.push_back(a);
-        bb.push_back(b);
-        cc.push_back(make_pair(a, b));
+    vector<ll> a(n);
+    vector<ll> b(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i] >> b[i];
     }
-    int minmed, maxmed;
-    sort(aa.begin(), aa.end());
-    if (n % 2 == 0) {
-        minmed = (aa[n/2] + aa[n/2-1]);
+    sort(a.begin(), a.end());
+    sort(b.begin(), b.end());
+    if (n % 2 == 1) {
+        int k = n / 2;
+        cout << b[k] - a[k] + 1 << endl;
     } else {
-        minmed = 2 * aa[n/2-1];
+        int k = n / 2 - 1;
+        cout << (b[k] + b[k + 1]) - (a[k] + a[k+1]) + 1 << endl;
     }
-    sort(bb.begin(), bb.end());
-    if (n % 2 == 0) {
-        maxmed = (aa[n/2] + aa[n/2-1]);
-    } else {
-        maxmed = 2 * aa[n/2-1];
-    }
-
-    int cnt = 0;
-    cout << minmed << endl;
-    cout << maxmed << endl;
-    for (int i=minmed+1;i<maxmed; i++) {
-        auto it = lower_bound(aa.begin(), aa.end(), i/2);
-        if (*it == i) {
-            cnt++;
-        }
-    }
-    cout << cnt << endl;
-    return 0;
 }
