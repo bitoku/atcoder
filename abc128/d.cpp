@@ -1,48 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+const ll mod = 1000000007;
 
-template< typename T >
-T mod_pow(T x, T n, const T &p) {
-    T ret = 1;
-    while(n > 0) {
-        if(n & 1) (ret *= x) %= p;
-        (x *= x) %= p;
-        n >>= 1;
-    }
-    return ret;
-}
+// TODO: solve without editorial
 
 int main() {
-    int N, M;
-    cin >> N >> M;
-    vector<bitset<10>> light(M);
-    vector<int> p(M);
-    for (int i = 0; i < M; ++i) {
-        int k;
-        cin >> k;
-        for (int j = 0; j < k; ++j) {
-            int s;
-            cin >> s;
-            light[i][s-1] = true;
-        }
+    int n, k;
+    cin >> n >> k;
+    vector<ll> v(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> v[i];
     }
-    for (int i = 0; i < M; ++i) {
-        cin >> p[i];
-    }
-    int cnt = 0;
-    const int limit = mod_pow(2, N, 100000);
-    for (int i = 0; i < limit; ++i) {
-        bitset<10> bit = bitset<10>(i);
-        bool ok = true;
-        for (int j = 0; j < M; ++j) {
-            if ((light[j] & bit).count() % 2 != p[j]) {
-                ok = false;
-                break;
+    ll result = 0;
+    for (int take = 1; take <= min(n, k); ++take) {
+        for (int left = 0; left <= take; ++left) {
+            ll temp = 0;
+            multiset<int> minus;
+            for (int i = 0; i < left; ++i) {
+                temp += v[i];
+                if (v[i] < 0) {
+                    minus.insert(v[i]);
+                }
             }
+            for (int i = n - 1; i >= n - take + left; --i) {
+                temp += v[i];
+                if (v[i] < 0) {
+                    minus.insert(v[i]);
+                }
+            }
+            auto it = minus.begin();
+            for (int i = 0; i < k - take && it != minus.end(); ++i) {
+                temp -= *(it++);
+            }
+            result = max(result, temp);
         }
-        if (ok) cnt++;
     }
-
-    cout << cnt << endl;
+    cout << result << endl;
 }
