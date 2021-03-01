@@ -1,32 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+const ll mod = 1000000007;
 
 int main() {
     ll N, D, A;
     cin >> N >> D >> A;
-    vector<pair<int, ll>> monster(N);
-    vector<ll> damage(N);
+    vector<pair<ll, ll>> monsters(N);
     for (int i = 0; i < N; ++i) {
-        int x;
-        ll h;
-        cin >> x >> h;
-        monster[i] = make_pair(x, h);
+        cin >> monsters[i].first >> monsters[i].second;
     }
-    ll ans = 0;
-    sort(monster.begin(), monster.end());
-    ll d = 0;
-    for (int i = 0; i < N; ++i) {
-        d -= damage[i];
-        int x = monster[i].first;
-        ll h = monster[i].second;
-        h -= d;
-        ll nbomb;
-        if (h % A == 0) nbomb = h / A;
-        else nbomb = h / A + 1;
-        ans += nbomb;
-        d += nbomb * A;
-        if (i + 2 * D + 1 < N) damage[i + 2 * D + 1] += nbomb * A;
+    sort(monsters.begin(), monsters.end());
+    deque<pair<ll, ll>> bombs;
+    ll bomb_sum = 0;
+    ll result = 0;
+    for (const auto [pos, hp] : monsters) {
+        if (!bombs.empty()) {
+            auto[lim, dam] = bombs.front();
+            while (lim < pos) {
+                bomb_sum -= dam;
+                bombs.pop_front();
+                if (bombs.empty()) break;
+                lim = bombs.front().first;
+                dam = bombs.front().second;
+            }
+        }
+        ll rest = hp - bomb_sum;
+        if (rest < 0) continue;
+        ll x = (rest + A - 1) / A;
+        result += x;
+        bomb_sum += x * A;
+        bombs.emplace_back(pos + 2 * D, x * A);
     }
-    cout << ans << endl;
+    cout << result << endl;
 }
