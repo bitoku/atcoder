@@ -3,4 +3,5 @@ project(codefestival2016qualC)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(codefestival2016qualC b.cpp)
+add_executable(b b.cpp)
+add_executable(c c.cpp)
