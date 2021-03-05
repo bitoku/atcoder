@@ -3,4 +3,5 @@ project(code_festival_2017_quala)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(code_festival_2017_quala c.cpp)
+add_executable(b b.cpp)
+add_executable(c c.cpp)
