@@ -3,4 +3,5 @@ project(indeednow_qualb)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(indeednow_qualb c.cpp)
+add_executable(c c.cpp)
+add_executable(d d.cpp)
