@@ -3,4 +3,5 @@ project(abc127)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(abc127 d.cpp)
+add_executable(abc127c c.cpp)
+add_executable(abc127d d.cpp)
