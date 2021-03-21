@@ -3,4 +3,5 @@ project(abc177)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(abc177 e.cpp)
+add_executable(abc177c c.cpp)
+add_executable(abc177e e.cpp)
