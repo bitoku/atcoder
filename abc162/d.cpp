@@ -30,9 +30,11 @@ ll solve(ll n, string& s) {
         }
     }
     ll result = dp[7][n];
-    for (int j = 1; j <= n / 2; ++j) {
-        for (int i = 0; i < n - 2 * j; ++i) {
-            if (s[i] != s[i + j] && s[i + j] != s[i + 2 * j] && s[i] != s[i + 2 * j]) result--;
+    for (int i = 0; i < n; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (j + j - i >= n) continue;
+            int k = j + j - i;
+            if (s[i] != s[j] && s[j] != s[k] && s[i] != s[k]) result--;
         }
     }
     return result;
