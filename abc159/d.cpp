@@ -8,13 +8,13 @@ int main() {
     int n;
     cin >> n;
     vector<ll> a(n);
-    unordered_map<ll, ll> m;
+    vector<ll> m(200001);
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
         m[a[i]]++;
     }
     ll result = 0;
-    for (const auto [x, y]: m) {
+    for (const auto y: m) {
         result += y * (y - 1) / 2;
     }
     for (int i = 0; i < n; ++i) {
