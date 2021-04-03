@@ -3,4 +3,5 @@ project(arc091)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(arc091 d.cpp)
+add_executable(arc091c c.cpp)
+add_executable(arc091d d.cpp)
