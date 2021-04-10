@@ -29,7 +29,7 @@ int main() {
         cout << 10000000000 << endl;
         return 0;
     }
-    ll zero = 0;
+    ll zero;
     if (t[0] == '0') {
         zero = 0;
     } else if (t[1] == '0') {
