@@ -3,4 +3,5 @@ project(code_thanks_festival_2018_open)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(code_thanks_festival_2018_open c.cpp)
+add_executable(code_thanks_festival_2018_openc c.cpp)
+add_executable(code_thanks_festival_2018_opend d.cpp)
