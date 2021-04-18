@@ -14,7 +14,9 @@ int main() {
         } else if (s[i] == '1') {
             t.push_back('1');
         } else {
-            t.pop_back();
+            if (!t.empty()) {
+                t.pop_back();
+            }
         }
     }
     cout << t << endl;
