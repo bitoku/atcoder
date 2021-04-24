@@ -3,4 +3,4 @@ project(dwacon2017)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(dwacon2017 main.cpp)
+add_executable(dwacon2017 b.cpp)
