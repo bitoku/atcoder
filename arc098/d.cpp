@@ -1,32 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// TODO: 4/27 AC
 
 int main() {
-    int n;
+    ll n;
     cin >> n;
-    vector<int> bit(20);
-    int l = 0;
-    ll result = 0;
     vector<ll> a(n);
+    vector<bitset<20>> b(n);
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
         for (int j = 0; j < 20; ++j) {
-            if (a[i] & (1 << j)) bit[j]++;
+            b[i] = a[i];
         }
-        while (any_of(bit.begin(), bit.end(), [](int x) {return x >= 2;})) {
-            result += i - l;
-            for (int j = 0; j < 20; ++j) {
-                if (a[l] & (1 << j)) bit[j]--;
+    }
+    int l = 0;
+    vector<int> x(20);
+    ll result = 0;
+    for (int r = 0; r < n; ++r) {
+        for (int i = 0; i < 20; ++i) {
+            if(b[r][i]) x[i]++;
+        }
+        while (any_of(x.begin(), x.end(), [](int k) {return k >= 2;})) {
+            for (int i = 0; i < 20; ++i) {
+                if (b[l][i]) x[i]--;
             }
             l++;
         }
-    }
-    for (; l < n; ++l) {
-        result += n - l;
+        result += r - l + 1;
     }
     cout << result << endl;
 }
