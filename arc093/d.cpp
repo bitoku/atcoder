@@ -1,30 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// TODO: 04/27 AC
 
 int main() {
-    int a, b;
+    ll a, b;
     cin >> a >> b;
-    vector<string> grid(100);
-    for (int i = 0; i < 50; ++i) {
-        grid[i] = string(100, '#');
-    }
-    for (int i = 50; i < 100; ++i) {
-        grid[i] = string(100, '.');
-    }
-    for (int i = 0; i < a - 1; ++i) {
-        grid[(2 * i / 100) * 2][2 * i % 100] = '.';
-    }
-    for (int i = 0; i < b - 1; ++i) {
-        grid[(2 * i / 100) * 2 + 51][2 * i % 100] = '#';
-    }
+    a--; b--;
     cout << 100 << ' ' << 100 << endl;
-    for (int i = 0; i < 100; ++i) {
-        for (int j = 0; j < 100; ++j) {
-            cout << grid[i][j];
+    for (int i = 0; i < 50; ++i) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < 100; ++j) {
+                cout << '#';
+            }
+            cout << endl;
+            continue;
+        }
+        for (int j = 0; j < 50; ++j) {
+            if (a == 0) {
+                cout << "##";
+                continue;
+            }
+            cout << "#.";
+            a--;
+        }
+        cout << endl;
+    }
+    for (int i = 0; i < 50; ++i) {
+        if (i % 2 == 0) {
+            for (int j = 0; j < 100; ++j) {
+                cout << '.';
+            }
+            cout << endl;
+            continue;
+        }
+        for (int j = 0; j < 50; ++j) {
+            if (b == 0) {
+                cout << "..";
+                continue;
+            }
+            cout << ".#";
+            b--;
         }
         cout << endl;
     }
