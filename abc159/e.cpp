@@ -1,77 +1,59 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include <cmath>
-
+#include <bits/stdc++.h>
 using namespace std;
-
-int count(const vector<string>& v, int y1, int y2, int x) {
-    int ans = 0;
-    for (int i=y1;i<=y2;i++) {
-        if (v[i][x] == '1') ans++;
-    }
-    return ans;
-}
+typedef long long ll;
+typedef long double ld;
+const ll mod = 1000000007;
 
 int main() {
-    int h, w, k;
-    vector<string> v;
+    ll h, w, k;
     cin >> h >> w >> k;
-    for (int i=0;i<h;i++) {
-        string x;
-        cin >> x;
-        v.push_back(x);
-    }
-    int horizontal = int(pow(2, h-1));
-    int m_line = 100000;
-    for (int i=0;i<horizontal;i++) {
-        vector<int> vh;
-        int line;
-        int hor = i;
-        vh.push_back(0);
-        for (int j=1;j<=h-1;j++) {
-            if (hor & 1) {
-                vh.push_back(j);
-            }
-            hor >>= 1;
+    vector<vector<ll>> choco(h, vector<ll>(w));
+    for (int i = 0; i < h; ++i) {
+        string s;
+        cin >> s;
+        for (int j = 0; j < w; ++j) {
+            if (s[j] == '1') choco[i][j] = 1;
         }
-        vh.push_back(h);
-        line = int(vh.size() - 2);
-
-        vector<int> vv(line+1);
-
-//        for (auto l: vh) {
-//            cout << l << ' ';
-//        }
-//        cout << endl;
-
-        for (int x=0; x<w; x++) {
-            vector<int> vvv;
-
-            for (int j=0;j<vh.size()-1;j++) {
-                int y1 = vh[j];
-                int y2 = vh[j+1] - 1;
-                vvv.push_back(count(v, y1, y2, x));
+    }
+    ll result = LONG_LONG_MAX;
+    for (int i = 0; i < (1 << (h - 1)); ++i) {
+        vector<vector<ll>> c(1, vector<ll>(w));
+        for (int j = 0; j < w; ++j) {
+            c[0][j] = choco[0][j];
+        }
+        ll temp = 0;
+        for (int j = 0; j < h - 1; ++j) {
+            if (i & (1 << j)) {
+                c.emplace_back(w);
+                temp++;
             }
-            for(int j=0;j<vv.size();j++) {
-                if (vvv[j] > k) {
-                    line = m_line;
-                }
-                if (vv[j] + vvv[j] > k) {
-                    copy(vvv.begin(), vvv.end(), vv.begin());
-                    line++;
-                    break;
-                }
-
-                vv[j] += vvv[j];
+            for (int l = 0; l < w; ++l) {
+                c.back()[l] += choco[j+1][l];
             }
-            if (line >= m_line) {
+        }
+        bool imp = false;
+        for (int j = 0; j < c.size(); ++j) {
+            if (any_of(c[j].begin(), c[j].end(), [&](ll x) {return x > k;})) {
+                imp = true;
                 break;
             }
         }
-        if (line < m_line) {
-            m_line = line;
+        if (imp) {
+            continue;
         }
+        vector<ll> t(c.size());
+        for (int l = 0; l < w; ++l) {
+            for (int j = 0; j < c.size(); ++j) {
+                t[j] += c[j][l];
+            }
+            if (any_of(t.begin(), t.end(), [&](ll x) {return x > k;})) {
+                for (int j = 0; j < c.size(); ++j) {
+                    t[j] = c[j][l];
+                }
+                temp++;
+            }
+        }
+        result = min(result, temp);
     }
-    cout << m_line << endl;
+    cout << result << endl;
 }
