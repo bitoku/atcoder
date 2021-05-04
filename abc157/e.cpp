@@ -1,54 +1,78 @@
-//
-// Created by 徳備彩人 on 2020/03/08.
-//
-
-#include <iostream>
-#include <set>
-#include <string>
+#include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+typedef long double ld;
+const ll mod = 1000000007;
+
+class FenwickTree {
+public:
+    ll n;
+    vector<ll> a;
+    explicit FenwickTree(ll _n): n(_n), a(_n+1, 0) {}
+    FenwickTree(): n(0) {}
+
+    void init(ll _n) {
+        n = _n;
+        a.clear();
+        a.resize(n+1, 0);
+    }
+
+    void add(ll i, ll x) {
+        i++;
+        if (i == 0) return;
+        for (ll k = i; k <= n; k+=(k & -k)) {
+            a[k] += x;
+        }
+    }
+
+    ll sum(ll i) {
+        i++;
+        ll s = 0;
+        if (i == 0) return s;
+        for (ll k = i; k > 0; k -= (k & -k)) {
+            s += a[k];
+        }
+        return s;
+    }
+};
+
 
 int main() {
-    int n;
-    string s;
-    int q;
-    set<int> pos[26];
-
+    ll n;
     cin >> n;
+    string s;
     cin >> s;
+    ll q;
     cin >> q;
-
-    for (int i = 0;i < s.size(); i++) {
-        pos[s[i]-'a'].insert(i+1);
+    FenwickTree ft[26];
+    for (int i = 0; i < 26; ++i) {
+        ft[i].init(n);
     }
-    for (int i = 0; i < q; i++) {
-        int t;
-        cin >> t;
-        if (t == 1) {
+    for (int i = 0; i < n; ++i) {
+        ft[s[i]-'a'].add(i, 1);
+    }
+    for (int i = 0; i < q; ++i) {
+        int qt;
+        cin >> qt;
+        if (qt == 1) {
             int j;
             char c;
             cin >> j >> c;
-            for (auto & po : pos) {
-                if (po.find(j) != po.end()) {
-                    po.erase(j);
-                }
-            }
-            pos[c-'a'].insert(j);
+            j--;
+            ft[s[j]-'a'].add(j, -1);
+            ft[c-'a'].add(j, 1);
+            s[j] = c;
         } else {
             int l, r;
             cin >> l >> r;
-            int x = 0;
-            for (auto & po : pos) {
-                auto it = po.find(l);
-                if (it != po.end()) {
-                    x += 1;
-                } else {
-                    it = po.upper_bound(l);
-                    if (it != po.end() && *it <= r) {
-                        x += 1;
-                    }
+            l--; r--;
+            ll result = 0;
+            for (int j = 0; j < 26; ++j) {
+                if (ft[j].sum(r) - ft[j].sum(l-1) > 0) {
+                    result++;
                 }
             }
-            cout << x << endl;
+            cout << result << endl;
         }
     }
 }
