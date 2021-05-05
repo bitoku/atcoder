@@ -1,51 +1,53 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-const long long mod = 998244353;
+typedef long long ll;
+typedef long double ld;
+const ll mod = 998244353;
 
 template< typename T >
-T mod_pow(T x, T n, const T &p) {
+T mod_pow(T x, T n) {
     T ret = 1;
     while(n > 0) {
-        if(n & 1) (ret *= x) %= p;
-        (x *= x) %= p;
+        if(n & 1) (ret *= x) %= mod;
+        (x *= x) %= mod;
         n >>= 1;
     }
     return ret;
 }
 
-vector<long long> fact, fact_inv, inv;
+unordered_map<ll, ll> fact_memo;
+ll mod_fact(ll x) {
+    if (fact_memo.find(x) != fact_memo.end()) return fact_memo[x];
+    if (x == 0) return 1;
+    fact_memo[x] = x * mod_fact(x - 1) % mod;
+    return fact_memo[x];
+}
 
-template< typename T >
-void init_combi(size_t size, const T mod) {
-    fact.resize(size);
-    fact_inv.resize(size);
-    inv.resize(size);
-    fact[0] = fact[1] = 1;
-    fact_inv[0] = fact_inv[1] = 1;
-    inv[1] = 1;
-    for (int i = 1; i < size-1; i++) {
-        fact[i+1] = fact[i] * (i + 1) % mod;
-        inv[i+1] = mod - inv[mod % (i+1)] * (mod / (i+1)) % mod;
-        fact_inv[i+1] = fact_inv[i] * inv[i+1] % mod;
+void init_fact(ll x) {
+    for (int i = 1; i <= x; ++i) {
+        mod_fact(i);
     }
 }
 
-template< typename T >
-T mod_combi(T n, T k, T mod) {
-    return fact[n] * (fact_inv[k] * fact_inv[n - k] % mod) % mod;
+unordered_map<ll, ll> invfact_memo;
+ll mod_invfact(ll x) {
+    if (invfact_memo.find(x) != invfact_memo.end()) return invfact_memo[x];
+    invfact_memo[x] = mod_pow(mod_fact(x), mod - 2);
+    return invfact_memo[x];
+}
+
+ll mod_combi(ll n, ll r) {
+    if (r < 0 || n < r) return 0;
+    return mod_fact(n) * mod_invfact(r) % mod * (mod_invfact(n - r)) % mod;
 }
 
 int main() {
-    long long N, M, K;
-    cin >> N >> M >> K;
-    long long ans = 0;
-    init_combi(N, mod);
-    for (long long k = 0; k <= K; ++k) {
-        long long s = mod_combi(N-1, k, mod);
-        s = (s * M) % mod;
-        s = (s * mod_pow(M-1, N-k-1, mod)) % mod;
-        ans = (ans + s) % mod;
+    ll n, m, k;
+    cin >> n >> m >> k;
+    ll result = 0;
+    for (int i = 0; i <= k; ++i) {
+        result += mod_combi(n-1, i) * m % mod * mod_pow(m-1, n - i - 1) % mod;
+        result %= mod;
     }
-    cout << ans << endl;
+    cout << result << endl;
 }
