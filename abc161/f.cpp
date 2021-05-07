@@ -1,34 +1,34 @@
 #include <bits/stdc++.h>
 using namespace std;
+typedef long long ll;
+typedef long double ld;
+const ll mod = 1000000007;
 
-template< typename T >
-void divisor(T n, vector<T>& divisors) {
-    T root_n = (T)sqrt(n);
-    for (int i = 1; i <= root_n; ++i) {
+set<ll> divisor(ll n) {
+    set<ll> ret;
+    for (ll i = 1; i * i <= n; ++i) {
         if (n % i == 0) {
-            divisors.push_back(i);
-            if (n / i != i) divisors.push_back(n / i);
+            ret.insert(i);
+            ret.insert(n / i);
         }
     }
+    return ret;
 }
 
 int main() {
-    long long n;
+    // N = k^x (yk + 1)
+    ll n;
     cin >> n;
-    vector<long long> divisors;
-    divisor(n, divisors);
-    int cnt = 0;
-    for (auto k : divisors) {
-        if (k == 1) continue;
-        long long tempn = n;
-        while (tempn % k == 0) tempn /= k;
-        if (tempn % k == 1) cnt++;
+    ll result = 0;
+    // x == 0
+    set<ll> k = divisor(n - 1);
+    k.erase(1);
+    set<ll> d = divisor(n);
+    for (auto i: d) {
+        if (i == 1) continue;
+        ll temp = n;
+        while (temp % i == 0) temp /= i;
+        if (temp % i == 1) result++;
     }
-    divisors.clear();
-    divisor(n-1, divisors);
-    for (auto k : divisors) {
-        if (k == 1) continue;
-        if (n % k == 1) cnt++;
-    }
-    cout << cnt << endl;
+    cout << k.size() + result << endl;
 }
