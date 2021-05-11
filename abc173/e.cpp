@@ -1,78 +1,77 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-const ll mod = (ll)1e9 + 7;
+typedef long double ld;
+const ll mod = 1000000007;
 
 int main() {
-    int N, K;
-    cin >> N >> K;
-    deque<ll> neg;
-    deque<ll> nonneg;
-    for (int i = 0; i < N; ++i) {
+    ll n, k;
+    cin >> n >> k;
+    vector<ll> plus;
+    vector<ll> minus;
+    ll zero = 0;
+    for (int i = 0; i < n; ++i) {
         ll a;
         cin >> a;
-        if (a < 0) neg.push_back(a);
-        else nonneg.push_back(a);
+        if (a > 0) plus.push_back(a);
+        else if (a < 0) minus.push_back(a);
+        else zero++;
     }
-
-    if (N == K) {
-        ll ans = 1;
-        int cnt = 0;
-        for (int i = 0; i < neg.size(); ++i) {
-            ans = (ans * neg[i]) % mod;
-            cnt++;
+    if (k == n) {
+        if (zero > 0) {
+            cout << 0 << endl;
+            return 0;
         }
-        for (int i = 0; i < nonneg.size(); ++i) {
-            ans = (ans * nonneg[i]) % mod;
-            cnt++;
+        ll result = 1;
+        for (ll a: plus) {
+            result *= a;
+            result %= mod;
         }
-        cout << (mod + ans) % mod << endl;
+        for (ll a: minus) {
+            result *= a;
+            result %= mod;
+        }
+        cout << (result + mod) % mod << endl;
         return 0;
     }
-
-    if (K % 2 == 1 && neg.size() == N) {
-        sort(neg.begin(), neg.end(), greater<ll>());
-        ll ans = 1;
-        int cnt = 0;
-        for (int i = 0; i < N; ++i) {
-            ans = (ans * neg[i]) % mod;
-            cnt++;
-            if (cnt == K) break;
-        }
-        cout << (mod + ans) % mod << endl;
+    if (k > n - zero || (k == n - zero && minus.size() % 2 == 1)) {
+        cout << 0 << endl;
         return 0;
     }
-
-    sort(neg.begin(), neg.end());
-    sort(nonneg.begin(), nonneg.end(), greater<ll>());
-
-    int cnt = 0;
-    ll ans = 1;
-    while (cnt < K) {
-        if (neg.size() <= 1) {
-            ans = (ans * nonneg.front()) % mod; nonneg.pop_front();
-            cnt++;
-            continue;
+    sort(plus.begin(), plus.end());
+    sort(minus.begin(), minus.end(), greater<>());
+    if (plus.empty() && k % 2 == 1) {
+        if (zero > 0) {
+            cout << 0 << endl;
+            return 0;
         }
-        if (nonneg.size() <= 1) {
-            if (cnt + 1 == K) {
-                ans = (ans * nonneg.front()) % mod; nonneg.pop_front();
-                cnt++;
-                continue;
-            }
-            ans = (ans * neg.front()) % mod; neg.pop_front();
-            ans = (ans * neg.front()) % mod; neg.pop_front();
-            cnt += 2;
-            continue;
+        ll result = 1;
+        for (int i = 0; i < k; ++i) {
+            result *= minus[i];
+            result %= mod;
         }
-        if (cnt + 1 < K && neg[0] * neg[1] > nonneg[0] * nonneg[1]) {
-            ans = (ans * neg.front()) % mod; neg.pop_front();
-            ans = (ans * neg.front()) % mod; neg.pop_front();
-            cnt += 2;
-            continue;
-        }
-        ans = (ans * nonneg.front()) % mod; nonneg.pop_front();
-        cnt++;
+        cout << (result + mod) % mod  << endl;
+        return 0;
     }
-    cout << (mod + ans) % mod << endl;
+    ll result = 1;
+    for (int i = 0; i < k; ++i) {
+        if (minus.size() < 2 || i == k - 1) {
+            result *= plus.back();
+            result %= mod;
+            plus.pop_back();
+            continue;
+        }
+        if (plus.size() >= 2 && plus[plus.size() - 1] * plus[plus.size() - 2] >= minus[minus.size() - 1] * minus[minus.size() - 2]) {
+            result *= plus.back() % mod;
+            result %= mod;
+            plus.pop_back();
+        } else {
+            result *= minus[minus.size() - 1] * minus[minus.size() - 2] % mod;
+            result %= mod;
+            minus.pop_back();
+            minus.pop_back();
+            i++;
+        }
+    }
+    cout << result << endl;
 }
