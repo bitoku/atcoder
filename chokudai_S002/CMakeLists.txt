@@ -5,3 +5,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(chokudai_S002f f.cpp)
 add_executable(chokudai_S002g g.cpp)
+add_executable(chokudai_S002h h.cpp)
