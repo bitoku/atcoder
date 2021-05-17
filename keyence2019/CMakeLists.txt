@@ -3,4 +3,5 @@ project(keyence2019)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(keyence2019 b.cpp)
+add_executable(keyence2019b b.cpp)
+add_executable(keyence2019c c.cpp)
