@@ -3,4 +3,5 @@ project(zone2021)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(zone2021 d.cpp)
+add_executable(zone2021c c.cpp)
+add_executable(zone2021d d.cpp)
