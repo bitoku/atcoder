@@ -3,4 +3,5 @@ project(arc115)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(arc115 a.cpp)
+add_executable(arc115a a.cpp)
+add_executable(arc115b b.cpp)
