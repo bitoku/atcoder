@@ -5,3 +5,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(arc118a a.cpp)
 add_executable(arc118b b.cpp)
+add_executable(arc118c c.cpp)
