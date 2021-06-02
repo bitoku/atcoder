@@ -3,4 +3,5 @@ project(ddcc2020qual)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(ddcc2020qual c.cpp)
+add_executable(ddcc2020qualc c.cpp)
+add_executable(ddcc2020quald d.cpp)
