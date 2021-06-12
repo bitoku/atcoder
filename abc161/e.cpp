@@ -4,6 +4,8 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
+// TODO: solve without editorial
+
 int main() {
     ll n, k, c;
     string s;
