@@ -6,10 +6,10 @@ const ll mod = 1000000007;
 // TODO: solve without editorial
 
 int main() {
-    int n, m;
+    ll n, m;
     cin >> n >> m;
-    vector<int> a(n);
-    vector<int> b(m);
+    vector<ll> a(n);
+    vector<ll> b(m);
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
     }
@@ -17,18 +17,18 @@ int main() {
         cin >> b[i];
     }
     vector<vector<ll>> dp(n+1, vector<ll>(m+1));
-    for (int i = 0; i <= n; ++i) {
+    for (int i = 1; i <= n; ++i) {
         dp[i][0] = i;
     }
-    for (int i = 0; i <= m; ++i) {
+    for (int i = 1; i <= m; ++i) {
         dp[0][i] = i;
     }
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {
-            if (a[i] == b[j]) {
-                dp[i+1][j+1] = min({dp[i][j+1] + 1, dp[i+1][j] + 1, dp[i][j]});
+            if (a[i] != b[j]) {
+                dp[i + 1][j + 1] = min({dp[i][j] + 1, dp[i][j + 1] + 1, dp[i + 1][j] + 1});
             } else {
-                dp[i+1][j+1] = min({dp[i][j+1] + 1, dp[i+1][j] + 1, dp[i][j] + 1});
+                dp[i + 1][j + 1] = min({dp[i][j], dp[i][j + 1] + 1, dp[i + 1][j] + 1});
             }
         }
     }
