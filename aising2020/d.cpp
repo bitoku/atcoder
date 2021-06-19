@@ -1,72 +1,63 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
-
-template< typename T >
-T mod_pow(T x, T n, const T &p) {
-    T ret = 1;
-    while(n > 0) {
-        if(n & 1) (ret *= x) %= p;
-        (x *= x) %= p;
-        n >>= 1;
-    }
-    return ret;
-}
-
-class Mod {
-public:
-    int n;
-    int f[200000] = {0};
-    explicit Mod(int _n): n(_n) {
-        if (n == 1) {
-            f[0] = 0;
-        } else {
-            f[0] = 1;
-        }
-        for (int i = 1; i < 200000; ++i) {
-            f[i] = 2 * f[i-1] % n;
-        }
-    }
-    int r(const bitset<200000>& bit) {
-        int result = 0;
-        for (int i = 0; i < 200000; ++i) {
-            if(bit[i]) result = (result + f[i]) % n;
-        }
-        return result;
-    }
-};
-
+// SOLVE
 
 int main() {
-    int n;
+    ll n;
     cin >> n;
-    bitset<200000> bit;
-    cin >> bit;
-    int p = bit.count();
-    Mod rpm(p-1 > 0 ? p - 1 : 1);
-    Mod rpM(p+1);
+    string s;
+    cin >> s;
+    reverse(s.begin(), s.end());
+    ll a = 0;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') a++;
+    }
+    vector<ll> plus(n);
+    plus[0] = 1;
+    for (int i = 1; i < n; ++i) {
+        plus[i] = (plus[i-1] << 1) % (a + 1);
+    }
+    ll plusx = 0;
+    for (int i = 0; i < n; ++i) {
+        if (s[i] == '1') plusx = (plusx + plus[i]) % (a + 1);
+    }
 
-    int xm = rpm.r(bit);
-    int xM = rpM.r(bit);
+    vector<ll> minus(n);
+    ll minusx = 0;
+    minus[0] = 1;
+    if (a > 1) {
+        for (int i = 1; i < n; ++i) {
+            minus[i] = (minus[i - 1] << 1) % (a - 1);
+        }
+        for (int i = 0; i < n; ++i) {
+            if (s[i] == '1') minusx = (minusx + minus[i]) % (a - 1);
+        }
+    }
     for (int i = n-1; i >= 0; --i) {
-        int k;
-        if (p == 1 && bit[i]) {
-            cout << 0 << endl;
-            continue;
-        }
-        if (bit[i]) {
-            k = (p - 1 + xm - rpm.f[i]) % (p - 1);
+        if (s[i] == '0') {
+            ll result = 1;
+            ll x = (plusx + plus[i]) % (a + 1);
+            while (x > 0) {
+                x %= __builtin_popcount(x);
+                result++;
+            }
+            cout << result << endl;
         } else {
-            k = (xM + rpM.f[i]) % (p + 1);
+            if (a == 1) {
+                cout << 0 << endl;
+                continue;
+            }
+            ll result = 1;
+            ll x = (minusx - minus[i] + a - 1) % (a - 1);
+            while (x > 0) {
+                x %= __builtin_popcount(x);
+                result++;
+            }
+            cout << result << endl;
         }
-        int cnt = 1;
-        while (k > 0) {
-            k = k % __builtin_popcount(k);
-            cnt++;
-        }
-        cout << cnt << endl;
     }
 }
