@@ -1,79 +1,66 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
-
-struct Node {
-    int first;
-    int second;
+struct Tree {
+    int parent;
+    vector<int> children;
 };
 
-Node dfs(vector<vector<int>> &children, vector<int> &parents, int current) {
-    if (children[current].empty()) {
-        return {1, 0};
-    }
-    deque<Node> childnodes_odd;
-    vector<Node> childnodes_even;
-
-    for (const auto child : children[current]) {
-        Node n = dfs(children, parents, child);
-        if ((n.first + n.second) % 2 == 1) {
-            childnodes_odd.push_back(n);
+pair<ll, ll> dfs(vector<Tree>& tree, int cur) {
+    vector<pair<ll, ll>> even, odd;
+    for (int next: tree[cur].children) {
+        auto p = dfs(tree, next);
+        if ((p.first + p.second) % 2 == 0) {
+            even.push_back(p);
         } else {
-            childnodes_even.push_back(n);
+            odd.push_back(p);
         }
     }
-    sort(childnodes_odd.begin(), childnodes_odd.end(), [](const Node& n1, const Node& n2){
-        return n1.first - n1.second < n2.first - n2.second;
-    });
-    sort(childnodes_even.begin(), childnodes_even.end(), [](const Node& n1, const Node& n2) {
-        return n1.first - n1.second < n2.first - n2.second;
-    });
-    Node node = {0, 0};
-    int i;
-    for (i = 0; i < childnodes_even.size(); ++i) {
-        Node n = childnodes_even[i];
-        if (n.first - n.second > 0) break;
-        node.first += n.first;
-        node.second += n.second;
+    // 根をとったほう、違うほう
+    pair<ll, ll> result = make_pair(1, 0);
+    sort(even.begin(), even.end(), [](auto p, auto q) { return p.second - p.first > q.second - q.first; });
+    sort(odd.begin(), odd.end(), [](auto p, auto q) { return p.second - p.first > q.second - q.first; });
+    int i = 0;
+    for (i = 0; i < even.size(); i++) {
+        auto p = even[i];
+        if (p.second < p.first) break;
+        result.first += p.first;
+        result.second += p.second;
     }
-    int j;
-    for (j = 0; j < childnodes_odd.size(); ++j) {
-        Node n = childnodes_odd[j];
+    for (int j = 0; j < odd.size(); ++j) {
+        auto p = odd[j];
         if (j % 2 == 0) {
-            node.first += n.first;
-            node.second += n.second;
+            result.first += p.first;
+            result.second += p.second;
         } else {
-            node.first += n.second;
-            node.second += n.first;
+            result.first += p.second;
+            result.second += p.first;
         }
     }
-    for (; i < childnodes_even.size(); ++i) {
-        Node n = childnodes_even[i];
-        if (j % 2 == 0) {
-            node.first += n.first;
-            node.second += n.second;
+    for (; i < even.size(); ++i) {
+        auto p = even[i];
+        if (odd.size() % 2 == 0) {
+            result.first += p.first;
+            result.second += p.second;
         } else {
-            node.first += n.second;
-            node.second += n.first;
+            result.first += p.second;
+            result.second += p.first;
         }
     }
-    node.first++;
-    return node;
+    return result;
 }
 
 int main() {
-    int n;
+    ll n;
     cin >> n;
-    vector<int> parents(n);
-    vector<vector<int>> children(n);
+    vector<Tree> tree(n);
     for (int i = 1; i < n; ++i) {
-        cin >> parents[i];
-        parents[i]--;
-        children[parents[i]].push_back(i);
+        cin >> tree[i].parent;
+        tree[i].parent--;
+        tree[tree[i].parent].children.push_back(i);
     }
-    Node node = dfs(children, parents, 0);
-    cout << node.first << endl;
+    cout << dfs(tree, 0).first << endl;
 }
