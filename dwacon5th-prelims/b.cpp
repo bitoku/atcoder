@@ -1,38 +1,47 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 6/22
 
 int main() {
     ll n, k;
     cin >> n >> k;
     vector<ll> a(n);
-    vector<ll> aa(n+1);
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
-        aa[i+1] += aa[i] + a[i];
     }
-    vector<ll> aaa;
-    for (int i = 0; i <= n; ++i) {
-        for (int j = i+1; j <= n; ++j) {
-            aaa.push_back(aa[j]-aa[i]);
+    vector<ll> s(n+1);
+    for (int i = 0; i < n; ++i) {
+        s[i+1] = s[i] + a[i];
+    }
+    vector<ll> xs;
+    ll t = 0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = i+1; j < n + 1; ++j) {
+            xs.push_back(s[j] - s[i]);
+            t = max(s[j] - s[i], t);
         }
     }
-    ll x = 0;
-    ll i = 1;
-    while (i <= aa[n]) i <<= 1;
-    while (i > 0) {
-        ll cnt = 0;
-        ll temp = x + i;
-        for (long long y : aaa) {
-            if ((temp & y) == temp) cnt++;
-        }
-        if (cnt >= k) {
-            x = temp;
-        }
-        i >>= 1;
+    ll len = 0;
+    while (t > 0) {
+        t >>= 1;
+        len++;
     }
-    cout << x << endl;
+    ll result = 0;
+    for (int i = len-1; i >= 0; --i) {
+        vector<ll> nx;
+        for (auto x: xs) {
+            if (x & (1ll << i)) {
+                nx.push_back(x);
+            }
+        }
+        if (nx.size() >= k) {
+            xs = nx;
+            result |= (1ll << i);
+        }
+    }
+    cout << result << endl;
 }
