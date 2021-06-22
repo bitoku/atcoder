@@ -1,55 +1,42 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 06/22
 
 struct Edge {
-    int from;
     int to;
     int c;
 };
 
-int n, m;
+vector<int> result;
+ll n, m;
 
-void dfs(vector<vector<Edge>>& tree, int cur, int x, vector<int>& num) {
-    num[cur] = x;
-    for (const auto & edge : tree[cur]) {
-        if (x == edge.c) {
-            dfs(tree, edge.to, (x + 1) % n + 1, num);
-        } else {
-            dfs(tree, edge.to, edge.c, num);
-        }
+void dfs(vector<vector<Edge>>& edges, int cur) {
+    for (auto& e: edges[cur]) {
+        if (result[e.to] != -1) continue;
+        if (result[cur] != e.c) result[e.to] = e.c;
+        else result[e.to] = (result[cur] + 1) % (int)n + 1;
+        dfs(edges, e.to);
     }
 }
 
 int main() {
     cin >> n >> m;
-    vector<vector<Edge>> edges(n+1);
+    vector<vector<Edge>> edges(n);
     for (int i = 0; i < m; ++i) {
         int u, v, c;
         cin >> u >> v >> c;
-        edges[u].push_back({u, v, c});
-        edges[v].push_back({v, u, c});
+        u--; v--;
+        edges[u].push_back({v, c});
+        edges[v].push_back({u, c});
     }
-    vector<vector<Edge>> tree(n+1);
-    vector<bool> included(n+1);
-    deque<int> dq;
-    dq.push_back(1);
-    included[1] = true;
-    while (!dq.empty()) {
-        int x = dq.front(); dq.pop_front();
-        for (const auto & edge: edges[x]) {
-            if (included[edge.to]) continue;
-            tree[x].push_back(edge);
-            included[edge.to] = true;
-            dq.push_back(edge.to);
-        }
-    }
-    vector<int> num(n + 1);
-    dfs(tree, 1, 1, num);
-    for (int i = 1; i <= n; ++i) {
-        cout << num[i] << endl;
+    result.resize(n, -1);
+    result[0] = edges[0].front().c;
+    dfs(edges, 0);
+    for (int i = 0; i < n; ++i) {
+        cout << result[i] << endl;
     }
 }
