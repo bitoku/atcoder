@@ -4,6 +4,8 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
+// SOLVED: 06/23
+
 int main() {
     ll n;
     cin >> n;
