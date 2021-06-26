@@ -1,37 +1,37 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 06/26
 
 int main() {
-    int n, k;
+    ll n, k;
     cin >> n >> k;
-    vector<ll> v(n);
+    deque<ll> v(n);
     for (int i = 0; i < n; ++i) {
         cin >> v[i];
     }
     ll result = 0;
-    for (int take = 1; take <= min(n, k); ++take) {
-        for (int left = 0; left <= take; ++left) {
+    // 合計i個とる
+    for (int i = 1; i <= min(k, n); ++i) {
+        // 左からj個取る
+        for (int j = 0; j <= i; ++j) {
+            priority_queue<ll, vector<ll>, greater<>> s;
+            for (int l = 0; l < j; ++l) {
+                s.push(v[l]);
+            }
+            for (int l = n-1; l >= n - i + j; --l) {
+                s.push(v[l]);
+            }
+            for (int l = 0; l < k - i && !s.empty(); ++l) {
+                if (s.top() > 0) break;
+                s.pop();
+            }
             ll temp = 0;
-            multiset<int> minus;
-            for (int i = 0; i < left; ++i) {
-                temp += v[i];
-                if (v[i] < 0) {
-                    minus.insert(v[i]);
-                }
-            }
-            for (int i = n - 1; i >= n - take + left; --i) {
-                temp += v[i];
-                if (v[i] < 0) {
-                    minus.insert(v[i]);
-                }
-            }
-            auto it = minus.begin();
-            for (int i = 0; i < k - take && it != minus.end(); ++i) {
-                temp -= *(it++);
+            while (!s.empty()) {
+                temp += s.top(); s.pop();
             }
             result = max(result, temp);
         }
