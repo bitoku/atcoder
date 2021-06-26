@@ -1,54 +1,56 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// TODO: solve without editorial 06/26
 
 int main() {
-    int n;
+    ll n;
     cin >> n;
-    int D[13] = {};
-    for (int i = 0; i < n; ++i) {
-        int a;
+    vector<ll> d(13);
+    d[0] = 1;
+    for (int i = 1; i <= n; ++i) {
+        ll a;
         cin >> a;
-        D[a]++;
+        d[min(a, 24 - a)]++;
     }
-    D[0]++;
-    for (int i = 0; i <= 12; ++i) {
-        if (((i == 0 || i == 12) && D[i] >= 2) || D[i] >= 3) {
-            cout << "0" << endl;
-            return 0;
-        }
+    ll result = 0;
+    if (d[0] >= 2 || d[12] >= 2) {
+        cout << 0 << endl;
+        return 0;
     }
-    int result = 0;
-    for (int i = 0; i <= (1 << 11); ++i) {
-        bitset<11> bit(i);
-        bool k[24] = {};
-        for (int j = 1; j <= 11; ++j) {
-            if (D[j] == 1) {
-                if (bit[j-1]) k[j] = true;
-                else k[24-j] = true;
-            } else if (D[j] == 2) {
-                k[j] = true;
-                k[24-j] = true;
+    for (int t = 0; t < (1 << 11); ++t) {
+        vector<ll> time(24);
+        for (int i = 1; i < 12; ++i) {
+            if (d[i] == 0) continue;
+            if (d[i] == 2) {
+                time[i] = 1;
+                time[(24 - i) % 24] = 1;
+            }
+            if (d[i] > 2) {
+                cout << 0 << endl;
+                return 0;
+            }
+            if (t & (1 << (i - 1))) {
+                time[i] = 1;
+            } else {
+                time[(24 - i) % 24] = 1;
             }
         }
-        if (D[0] == 1) {
-            k[0] = true;
+        if (d[12] == 1) {
+            time[12] = 1;
         }
-        if (D[12] == 1) {
-            k[12] = true;
+        ll k = 0;
+        ll temp = 12;
+        for (int i = 1; i < 24; ++i) {
+            if (!time[i]) continue;
+            temp = min(temp, i - k);
+            k = i;
         }
-        int before = -24;
-        int diff = 24;
-        for (int j = 0; j < 24; ++j) {
-            if (k[j]) {
-                diff = min({diff, j - before, 24 - j});
-                before = j;
-            }
-        }
-        result = max(result, diff);
+        temp = min(temp, 24 - k);
+        result = max(result, temp);
     }
     cout << result << endl;
 }
