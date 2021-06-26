@@ -1,107 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 06/26
 
-struct P {
+struct Cake {
     ll x;
     ll y;
     ll z;
 };
 
-ll abs(P p) {
-    return abs(p.x) + abs(p.y) + abs(p.z);
-}
-
 int main() {
-    int n, m;
+    ll n, m;
     cin >> n >> m;
-    vector<P> v(n);
+    vector<Cake> cakes(n);
     for (int i = 0; i < n; ++i) {
-        cin >> v[i].x >> v[i].y >> v[i].z;
+        cin >> cakes[i].x >> cakes[i].y >> cakes[i].z;
     }
-    P p = {0};
+    priority_queue<ll> xyz[8];
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            ll sum = 0;
+            if (j & 0b1) sum += cakes[i].x;
+            else sum -= cakes[i].x;
+            if (j & 0b10) sum += cakes[i].y;
+            else sum -= cakes[i].y;
+            if (j & 0b100) sum += cakes[i].z;
+            else sum -= cakes[i].z;
+            xyz[j].push(sum);
+        }
+    }
+    ll sum[8] = {};
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            sum[j] += xyz[j].top(); xyz[j].pop();
+        }
+    }
     ll result = 0;
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return a.x + a.y + a.z < b.x + b.y + b.z;
-    });
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
+    for (int i = 0; i < 8; ++i) {
+        result = max(result, sum[i]);
     }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return a.x + a.y - a.z < b.x + b.y - b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return a.x - a.y + a.z < b.x - b.y + b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return a.x - a.y - a.z < b.x - b.y - b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return - a.x + a.y + a.z < - b.x + b.y + b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return - a.x + a.y - a.z < - b.x + b.y - b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return - a.x - a.y + a.z < - b.x - b.y + b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
-    sort(v.begin(), v.end(), [](P& a, P& b) {
-        return - a.x - a.y - a.z < - b.x - b.y - b.z;
-    });
-    p = {0};
-    for (int i = 0; i < m; ++i) {
-        p.x += v[i].x;
-        p.y += v[i].y;
-        p.z += v[i].z;
-    }
-    result = max(result, abs(p));
     cout << result << endl;
 }
