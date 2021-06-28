@@ -1,19 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
 int main() {
-    int n, m, d;
+    ll n, m, d;
     cin >> n >> m >> d;
-    ll cnt = 0;
-    if (d == 0) {
-        cnt = n;
+    if (d != 0) {
+        cout << setprecision(12) << (ld)2 * (n - d) * (m - 1) / n / n << endl;
     } else {
-        for (int i = 1; i <= n; ++i) {
-            if (i - d > 0) cnt++;
-            if (i + d <= n) cnt++;
-        }
+        cout << setprecision(12) << (ld)n * (m - 1) / n / n << endl;
     }
-    cout << setprecision(8) << cnt * (m - 1) / (double)n / n << endl;
 }
