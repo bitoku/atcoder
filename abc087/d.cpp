@@ -1,46 +1,94 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+class UnionFind {
+private:
+    vector<int> parent;
+    vector<ll> size;
+public:
+    UnionFind(unsigned long n): parent(n), size(n, 1) {
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
+        }
+    }
 
-struct Edge {
-    int from;
-    int to;
-    int dist;
+    ll count(int x) {
+        return size[root(x)];
+    }
+
+    int root(int x) {
+        if (parent[x] == x) return x;
+        return parent[x] = root(parent[x]);
+    }
+
+    void unite(int x, int y) {
+        x = root(x);
+        y = root(y);
+        if (x == y) return;
+
+        if (size[x] > size[y]) {
+            parent[y] = x;
+            size[x] += size[y];
+        } else {
+            parent[x] = y;
+            size[y] += size[x];
+        }
+    }
+
+    bool same(int x, int y) {
+        return root(x) == root(y);
+    }
 };
 
 int main() {
-    int n, m;
+    ll n, m;
     cin >> n >> m;
-    vector<vector<Edge>> edges(n + 1);
+    UnionFind uf(n);
+    vector<vector<pair<int, ll>>> v(n);
+    vector<int> rightcnt(n);
     for (int i = 0; i < m; ++i) {
-        int l, r, d;
+        int l, r;
+        ll d;
         cin >> l >> r >> d;
-        edges[l].push_back({l, r, d});
-        edges[r].push_back({r, l, -d});
+        l--; r--;
+        v[l].emplace_back(r, d);
+        uf.unite(l, r);
+        rightcnt[r]++;
     }
-    vector<ll> x(n+1, LONG_LONG_MAX);
-    deque<int> dq;
-    for (int i = 1; i <= n; ++i) {
-        if (x[i] != LONG_LONG_MAX) continue;
+    vector<ll> dist(n, -1);
+    vector<bool> done(n);
+    int group = 0;
+    for (int i = 0; i < n; ++i) {
+        if (rightcnt[i] > 0) continue;
+        group++;
+        dist[i] = 0;
+        deque<int> dq;
         dq.push_back(i);
-        x[i] = 0;
         while (!dq.empty()) {
-            int from = dq.front(); dq.pop_front();
-            for (const auto & edge : edges[from]) {
-                if (x[edge.to] != LONG_LONG_MAX) {
-                    if (x[edge.to] != x[from] + edge.dist) {
-                        cout << "No" << endl;
-                        return 0;
-                    }
-                    continue;
+            int k = dq.front(); dq.pop_front();
+            done[k] = true;
+            for (auto [x, d]: v[k]) {
+                if (dist[x] != -1 && dist[x] != dist[k] + d) {
+                    cout << "No" << endl;
+                    return 0;
                 }
-                x[edge.to] = x[from] + edge.dist;
-                dq.push_back(edge.to);
+                dist[x] = dist[k] + d;
+                if (done[x]) continue;
+                dq.push_back(x);
+                done[x] = true;
             }
         }
     }
-    cout << "Yes" << endl;
+    set<int> s;
+    for (int i = 0; i < n; ++i) {
+        s.insert(uf.root(i));
+    }
+    if (group == s.size()) {
+        cout << "Yes" << endl;
+    } else {
+        cout << "No" << endl;
+    }
 }
