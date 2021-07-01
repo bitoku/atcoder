@@ -1,37 +1,34 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
+
+// SOLVED: 07/01
 
 int main() {
     ll n, x;
     cin >> n >> x;
     vector<ll> a(n);
-    ll sum = 0;
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
     }
-    ll result = 0;
-    int cc = 0;
-    for (int c = 1; c <= n; ++c) {
-        ll dp[100][100][100] = {0};
-        for (int i = 0; i < n; ++i) {
-            int r = a[i] % c;
-            dp[i][0][r] = max(dp[i][0][r], a[i]);
-            for (int j = 0; j < c && j <= i; ++j) {
-                for (int k = 0; k < c; ++k) {
-                    int p = (k + r) % c;
-                    if (j > 0 && dp[i-1][j-1][k] > 0) {
-                        dp[i][j][p] = max(dp[i][j][p], dp[i-1][j-1][k] + a[i]);
+    ll result = LONG_LONG_MAX;
+    for (int i = n; i >= 1; --i) {
+        vector<vector<ll>> v(n, vector<ll>(n));
+        for (int j = 0; j < n; ++j) {
+            for (int k = max(i - 2, j - 1); k >= 0; --k) {
+                for (int l = 0; l < n; ++l) {
+                    if (v[k][l]) {
+                        v[k+1][(l + a[j]) % i] = max(v[k+1][(l + a[j]) % i], v[k][l] + a[j]);
                     }
-                    dp[i][j][p] = max(dp[i][j][p], dp[i-1][j][p]);
                 }
             }
+            v[0][a[j] % i] = max(v[0][a[j] % i], a[j]);
         }
-        if (dp[n-1][c-1][x % c] > result) {
-            result = dp[n-1][c-1][x % c];
-            cc = c;
+        if (v[i - 1][x % i]) {
+            result = min((x - v[i - 1][x % i]) / i, result);
         }
     }
-    cout << (x - result) / cc << endl;
+    cout << result << endl;
 }
