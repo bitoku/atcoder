@@ -33,8 +33,8 @@ int main() {
                 b = a[i];
             }
         }
+        if (cnt < k) return false;
         if (cnt > k) return true;
-        else if (cnt < k) return false;
         if (l - b >= x) return true;
         return false;
     };
