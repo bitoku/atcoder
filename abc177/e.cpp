@@ -1,9 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// TODO: 07/29
+
+vector<ll> get_primes(ll n) {
+    vector<bool> b(n+1, true);
+    b[0] = b[1] = false;
+    for (int i = 2; i <= n; ++i) {
+        if (!b[i]) continue;
+        for (int j = 2; i * j <= n; ++j) {
+            b[i * j] = false;
+        }
+    }
+    vector<ll> primes;
+    for (int i = 2; i <= n; ++i) {
+        if (!b[i]) continue;
+        primes.push_back(i);
+    }
+    return primes;
+}
 
 template<class T>
 T gcd(T a, T b) {
@@ -12,41 +30,41 @@ T gcd(T a, T b) {
     return gcd(b, a%b);
 }
 
-vector<vector<int>> get_factors(int n) {
-    vector<vector<int>> v(n);
-    for (int i = 2; i < n; ++i) {
-        if (!v[i].empty()) continue;
-        for (int j = 1; j * i < n; ++j) {
-            v[i*j].push_back(i);
-        }
-    }
-    return v;
-}
-
 int main() {
-    int n;
+    ll n;
     cin >> n;
-    vector<int> a(n);
+    vector<ll> a(n);
     cin >> a[0];
-    ll gcd_all = a[0];
+    ll m = a[0];
+    ll g = a[0];
     for (int i = 1; i < n; ++i) {
         cin >> a[i];
-        gcd_all = gcd(gcd_all, a[i]);
+        m = max(m, a[i]);
+        g = gcd(g, a[i]);
     }
-    if (gcd_all != 1) {
+    if (g != 1) {
         cout << "not coprime" << endl;
         return 0;
     }
-    sort(a.begin(), a.end());
-    vector<vector<int>> f = get_factors(1000001ll);
-    vector<bool> used(1000001ll);
-    for (const auto x : a) {
-        for (const auto y : f[x]) {
-            if (used[y]) {
-                cout << "setwise coprime" << endl;
-                return 0;
+    vector<ll> primes = get_primes(m);
+    map<ll, ll> mp;
+    for (int i = 0; i < n; ++i) {
+        ll t = a[i];
+        for (auto p: primes) {
+            if (p * p > a[i]) break;
+            if (t % p == 0) {
+                mp[p]++;
             }
-            used[y] = true;
+            while (t % p == 0) t /= p;
+        }
+        if (t > 1) {
+            mp[t]++;
+        }
+    }
+    for (auto [x, y]: mp) {
+        if (y > 1) {
+            cout << "setwise coprime" << endl;
+            return 0;
         }
     }
     cout << "pairwise coprime" << endl;
