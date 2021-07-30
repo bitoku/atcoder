@@ -9,3 +9,4 @@ add_executable(typical9003 03.cpp)
 add_executable(typical9004 04.cpp)
 
 add_executable(typical9006 06.cpp)
+add_executable(typical9007 07.cpp)
