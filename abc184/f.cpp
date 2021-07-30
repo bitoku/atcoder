@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 07/30
 
 int main() {
     ll n, t;
@@ -12,25 +13,29 @@ int main() {
     for (int i = 0; i < n; ++i) {
         cin >> a[i];
     }
-    set<ll> b;
-    set<ll> c;
-    b.insert(0);
-    c.insert(0);
-    for (int i = 0; i < n; ++i) {
-        set<ll> &d = i % 2 == 0 ? b : c;
-        vector<ll> next;
-        for (const auto y : d) {
-            if (y + a[i] > t) continue;
-            next.push_back(y + a[i]);
+    ll lim = 1ll << min(20ll, n);
+    vector<ll> v;
+    for (ll i = 0; i < lim; ++i) {
+        ll temp = 0;
+        for (int j = 0; j < min(20ll, n); ++j) {
+            if (i & (1ll << j)) temp += a[j];
         }
-        for (const auto y : next) {
-            d.insert(y);
+        v.push_back(temp);
+    }
+    ll rest = 1ll << (n - min(20ll, n));
+    set<ll> s;
+    for (ll i = 0; i < rest; ++i) {
+        ll temp = 0;
+        for (int j = 0; j < (n - min(20ll, n)); ++j) {
+            if (i & (1ll << j)) temp += a[min(20ll, n) + j];
         }
+        s.insert(temp);
     }
     ll result = 0;
-    for (const auto x : b) {
-        auto it = c.upper_bound(t - x);
-        result = max(result, *(--it) + x);
+    for (auto x: v) {
+        auto it = s.upper_bound(t - x);
+        if (it == s.begin()) continue;
+        result = max(result, x + *(--it));
     }
     cout << result << endl;
 }
