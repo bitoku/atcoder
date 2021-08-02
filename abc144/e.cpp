@@ -4,6 +4,8 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
+// SOLVED: 08/02
+
 template<class Condition>
 ll binsearch(ll ng, ll ok, Condition func) {
     while (abs(ok - ng) > 1) {
