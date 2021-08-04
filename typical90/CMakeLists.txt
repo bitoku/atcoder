@@ -19,3 +19,6 @@ add_executable(typical9013 13.cpp)
 add_executable(typical9014 14.cpp)
 add_executable(typical9015 15.cpp)
 add_executable(typical9016 16.cpp)
+
+add_executable(typical9018 18.cpp)
+add_executable(typical9019 19.cpp)
