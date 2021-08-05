@@ -22,14 +22,9 @@ int main() {
     }
     for (int i = 4; i <= 2 * n; i += 2) {
         for (int j = 0; j < 2 * n - i + 1; ++j) {
-            for (int k = 0; k < i; ++k) {
-                for (int l = k + 1; l < i; l += 2) {
-                    dp[j][j+i] = min(dp[j][j+i],
-                                     dp[j][j+k] +
-                                     dp[j+k+1][j+l] +
-                                     dp[j+l+1][j+i] +
-                                     abs(a[j + k] - a[j + l]));
-                }
+            dp[j][j+i] = min(dp[j][j+i], dp[j+1][j+i-1] + abs(a[j] - a[j+i-1]));
+            for (int k = 0; k < i; k += 2) {
+                dp[j][j+i] = min(dp[j][j+i], dp[j][j+k] + dp[j+k][j+i]);
             }
         }
     }
