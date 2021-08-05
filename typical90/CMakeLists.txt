@@ -22,3 +22,4 @@ add_executable(typical9016 16.cpp)
 
 add_executable(typical9018 18.cpp)
 add_executable(typical9019 19.cpp)
+add_executable(typical9020 20.cpp)
