@@ -33,3 +33,5 @@ add_executable(typical9027 27.cpp)
 add_executable(typical9028 28.cpp)
 add_executable(typical9029 29.cpp)
 add_executable(typical9030 30.cpp)
+
+add_executable(typical9032 32.cpp)
