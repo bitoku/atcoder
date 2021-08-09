@@ -5,3 +5,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(ablc c.cpp)
 add_executable(abld d.cpp)
+add_executable(able e.cpp)
