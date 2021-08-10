@@ -51,3 +51,5 @@ add_executable(typical9044 44.cpp)
 add_executable(typical9046 46.cpp)
 
 add_executable(typical9048 48.cpp)
+
+add_executable(typical9050 50.cpp)
