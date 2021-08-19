@@ -85,3 +85,5 @@ add_executable(typical9079 79.cpp)
 
 add_executable(typical9081 81.cpp)
 add_executable(typical9082 82.cpp)
+
+add_executable(typical9084 84.cpp)
