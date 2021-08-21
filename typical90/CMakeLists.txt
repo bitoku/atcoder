@@ -7,7 +7,7 @@ add_executable(typical9001 01.cpp)
 add_executable(typical9002 02.cpp)
 add_executable(typical9003 03.cpp)
 add_executable(typical9004 04.cpp)
-
+add_executable(typical9005 05.cpp)
 add_executable(typical9006 06.cpp)
 add_executable(typical9007 07.cpp)
 add_executable(typical9008 08.cpp)
