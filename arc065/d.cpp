@@ -4,7 +4,7 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 08/23
 
 class UnionFind {
 private:
@@ -48,25 +48,26 @@ public:
 int main() {
     ll n, k, l;
     cin >> n >> k >> l;
-    UnionFind rail(n);
-    UnionFind road(n);
+    UnionFind uf1(n), uf2(n);
     for (int i = 0; i < k; ++i) {
-        int p, q;
-        cin >> p >> q;
-        p--; q--;
-        rail.unite(p, q);
+        int a, b;
+        cin >> a >> b;
+        a--; b--;
+        uf1.unite(a, b);
     }
     for (int i = 0; i < l; ++i) {
-        int r, s;
-        cin >> r >> s;
-        r--; s--;
-        road.unite(r, s);
+        int a, b;
+        cin >> a >> b;
+        a--; b--;
+        uf2.unite(a, b);
     }
-    map<pair<ll, ll>, ll> m;
+    map<pair<int, int>, int> mp;
     for (int i = 0; i < n; ++i) {
-        m[make_pair(rail.root(i), road.root(i))]++;
+        mp[make_pair(uf1.root(i), uf2.root(i))]++;
     }
-    for (int i = 0; i < n; ++i) {
-        cout << m[make_pair(rail.root(i), road.root(i))] << endl;
+    cout << mp[make_pair(uf1.root(0), uf2.root(0))];
+    for (int i = 1; i < n; ++i) {
+        cout << ' ' << mp[make_pair(uf1.root(i), uf2.root(i))];
     }
+    cout << endl;
 }
