@@ -4,23 +4,17 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
-
-ll dp[1000001][2];
+// TODO: 08/30
 
 int main() {
-    string s;
-    cin >> s;
-    vector<ll> n(s.size() + 1);
-    for (int i = 0; i < s.size(); ++i) {
-        n[i] = s[s.size() - i - 1] - '0';
-    }
-    ll result = 0;
-    dp[0][0] = 0;
-    dp[0][1] = 1;
+    string n;
+    cin >> n;
+    vector<vector<ll>> dp(2, vector<ll>(n.size()+1));
+    dp[1][0] = 1;
     for (int i = 0; i < n.size(); ++i) {
-        dp[i+1][0] = min(dp[i][0] + n[i], dp[i][1] + 10 - n[i]);
-        dp[i+1][1] = min(dp[i][0] + n[i] + 1, dp[i][1] + 10 - n[i] - 1);
+        ll k = n[i] - '0';
+        dp[0][i+1] = min(dp[0][i] + k, dp[1][i] + 10 - k);
+        dp[1][i+1] = min(dp[0][i] + k + 1, dp[1][i] + 9 - k);
     }
-    cout << dp[n.size()][0] << endl;
+    cout << dp[0][n.size()] << endl;
 }
