@@ -4,7 +4,7 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve
+// TODO: 09/05(stack)
 
 class UnionFind {
 private:
@@ -48,27 +48,27 @@ public:
 int main() {
     ll n;
     cin >> n;
-    vector<pair<ll, ll>> x(n);
+    vector<tuple<int, int, int>> v(n);
     for (int i = 0; i < n; ++i) {
-        cin >> x[i].first >> x[i].second;
-        x[i].first--; x[i].second--;
+        int x, y;
+        cin >> x >> y;
+        v[i] = {x, y, i};
     }
-    vector<int> ids(n);
-    iota(ids.begin(), ids.end(), 0);
-    sort(ids.begin(), ids.end(), [&](int i, int j) { return x[i] < x[j]; });
+    sort(v.begin(), v.end());
     UnionFind uf(n);
-    set<pair<int, int>> s;
-    for (auto i: ids) {
-        if (s.empty() || s.begin()->first > x[i].second) s.insert(make_pair(x[i].second, i));
-        else {
-            auto it = s.begin();
-            uf.unite(i, it->second);
-            ++it;
-            for (; it != s.end() && it->first < x[i].second ;) {
-                uf.unite(i, it->second);
-                it = s.erase(it);
-            }
+    stack<pair<int, int>> st;
+    for (int i = 0; i < n; ++i) {
+        auto [x, y, idx] = v[i];
+        if (st.empty() || st.top().first > y) {
+            st.push({y, idx});
+            continue;
         }
+        auto t = st.top();
+        while (!st.empty() && st.top().first < y) {
+            uf.unite(st.top().second, idx);
+            st.pop();
+        }
+        st.push(t);
     }
     for (int i = 0; i < n; ++i) {
         cout << uf.count(i) << endl;
