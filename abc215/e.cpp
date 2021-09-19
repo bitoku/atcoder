@@ -4,41 +4,46 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 998244353;
 
+// TODO: 09/19
+
 int main() {
     ll n;
     cin >> n;
     string s;
     cin >> s;
-    vector<vector<ll>> dp(1 << 10, vector<ll>(n + 1));
-    vector<vector<ll>> dps(1 << 10, vector<ll>(n + 1));
+    vector<vector<vector<ll>>> dp(1 << 10, vector<vector<ll>>(10, vector<ll>(n + 1)));
     vector<vector<ll>> a(10);
-    for (int i = 0; i < (1 << 10); ++i) {
-        dp[i][0] = 1;
-        dps[i][0] = 1;
-    }
     for (int i = 0; i < n; ++i) {
         int c = s[i] - 'A';
         vector<ll>& v = a[c];
         for (int j = 0; j < (1 << 10); ++j) {
-            if (j & (1 << c)) continue;
-            dp[j | (1 << c)][i+1] = dps[j][i];
-        }
-        for (auto x: v) {
-            for (int j = 0; j < (1 << 10); ++j) {
-                if (!(j & (1 << c))) continue;
-                dp[j][i+1] += dp[j][x];
-                dp[j][i+1] %= mod;
+            if (j == 0) {
+                dp[1 << c][c][i+1]++;
+            } else if (j & (1 << c)) {
+                dp[j][c][i+1] += 2 * dp[j][c][i];
+            } else {
+                for (int k = 0; k < 10; ++k) {
+                    if (!(j & (1 << k))) continue;
+                    dp[j | (1 << c)][c][i+1] += dp[j][k][i];
+                }
             }
         }
-        v.push_back(i+1);
         for (int j = 0; j < (1 << 10); ++j) {
-            dps[j][i+1] = dp[j][i+1] + dps[j][i];
-            dps[j][i+1] %= mod;
+            for (int k = 0; k < 10; ++k) {
+                if (k == c) continue;
+                dp[j][k][i+1] = dp[j][k][i];
+            }
+        }
+        for (int j = 0; j < (1 << 10); ++j) {
+            dp[j][c][i+1] %= mod;
         }
     }
-    int bit = 0;
-    for (int i = 0; i < n; ++i) {
-        bit |= (1 << (s[i] - 'A'));
+    ll result = 0;
+    for (int i = 0; i < 10; ++i) {
+        for (int j = 0; j < (1 << 10); ++j) {
+            result += dp[j][i][n];
+        }
+        result %= mod;
     }
-    cout << (dps[bit][n] - 1 + mod) % mod << endl;
+    cout << (result + mod) % mod << endl;
 }
