@@ -4,12 +4,7 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
-
-struct Edge {
-    int from;
-    int to;
-};
+// TODO: 09/21
 
 int main() {
     ll n;
@@ -20,22 +15,18 @@ int main() {
         cin >> x;
         a.insert(x);
     }
-    auto it = a.rbegin();
-    ll cnt = 0;
-    for (; it != a.rend(); it = a.rbegin()) {
-        ll t = *it;
-        ll x = t;
-        a.erase(--(it.base()));
-        ll k = 0;
-        while (t > 0) {
-            t >>= 1;
-            k++;
-        }
-        auto pit = a.find((1 << k) - x);
-        if (pit != a.end()) {
-            a.erase(pit);
-            cnt++;
+    ll result = 0;
+    while (!a.empty()) {
+        ll x = *a.rbegin();
+        a.erase(a.find(x));
+        for (int j = 1; j <= 30; ++j) {
+            if ((1ll << j) < x) continue;
+            if ((1ll << j) > 2 * x) break;
+            auto it = a.find((1ll << j) - x);
+            if (it == a.end()) continue;
+            a.erase(it);
+            result++;
         }
     }
-    cout << cnt << endl;
+    cout << result << endl;
 }
