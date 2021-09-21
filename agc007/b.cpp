@@ -4,30 +4,28 @@ typedef long long ll;
 typedef long double ld;
 const ll mod = 1000000007;
 
-// TODO: solve without editorial
+// SOLVED: 09/21
 
 int main() {
-    // a_i = X * i;
-    // b_i = X * (n - i) + r_i;
     ll n;
     cin >> n;
-    vector<ll> p(n);
+    vector<int> p(n), q(n);
     for (int i = 0; i < n; ++i) {
         cin >> p[i];
         p[i]--;
+        q[p[i]] = i+1;
     }
-    vector<ll> r(n);
+    vector<ll> a(n), b(n);
     for (int i = 0; i < n; ++i) {
-        r[p[i]] = i + 1;
+        a[i] = 30000 * (i + 1);
+        b[i] = 600000000 + q[i] - 30000 * (i + 1);
     }
-    cout << 30000;
-    for (int i = 2; i <= n; ++i) {
-        cout << ' ' << 30000 * i;
+    for (int i = 0; i < n; ++i) {
+        cout << a[i] << ' ';
     }
     cout << endl;
-    cout << 30000 * (n - 1) + r[0];
-    for (int i = 1; i < n; ++i) {
-        cout << ' ' << 30000 * (n - i - 1) + r[i];
+    for (int i = 0; i < n; ++i) {
+        cout << b[i] << ' ';
     }
     cout << endl;
 }
